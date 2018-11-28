@@ -22,33 +22,37 @@ def GenerateGraph(numVerts, density, maxWeight, style, numGroups=5):
                     w = np.random.randint(maxWeight)
                     links.append({'source': x['name'], 'target': y['name'], 'value': w})
 
-    if style == "t":
+    if style == "t": #Generate Tree
         print("t")
-        N = nodes
-        C = int(len(N)*density*.33)
+        N = nodes                       # Temp node array
+        C = int(len(N)*density*.33)     # Random MaxChildren
         print("C: "+str(C))
-        r = N[0]
-        N = N[1:] ; N.reverse()
+        r = N[0]                        # Set root node
+        N = N[1:] ; N.reverse()         # Remove root node from N, reverse N
+        print("---------")
         while N != []:
-            print(">" + str(N))
-            c = np.random.randint(C)+1
-            print("c: "+str(c))
+            #print("<N "+str(len(N))+">" + str(N))
+            c = np.random.randint(C)+1  # Choose num children
+            #print("c: "+str(c))
+
             if len(N) <= c:
                 for n in N:
-                    print(">>end")
+                    #print(">>end")
                     w = np.random.randint(maxWeight)
                     links.append({'source': n['name'], 'target': r['name'], 'value': w})
-                print(N)
-                print(">>"+str(len(links)))
+                #print(N)
+                #print(">>"+str(len(links)))
                 N=[]
+
             else:
-                print("child: "+str(N[:c]))
-                children = N[:c]
-                N = N[c:]
-                print(N)
-                print(len(N) - c, len(N))
-                p = np.random.randint(len(N)-c,len(N))
-                P = N[:p]+N[p+1:]
+                children = N[:c]    # Get children
+                N = N[c:]           # Remove children from N
+                #print("<Childs "+str(len(children))+">"+str(N[:c]))
+                #print("<N "+str(len(N))+">")
+                #choose parent, leave parent in N
+                pIndex = np.random.randint(len(N))      # Random parent node index
+                P = N[pIndex]
+                #print("<P>"+str(P))
                 for child in children:
                     w = np.random.randint(maxWeight)
                     links.append({'source':child['name'], 'target': P['name'], 'value': w})
