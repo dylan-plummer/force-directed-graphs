@@ -32,12 +32,12 @@ def sql_execute(sql):
     db.close()
 
 
-def process_form(form):
+def process_form(form, graph_types):
     try:
         num_verts = request.form['num-verts']
         edge_prob = request.form['edge-prob']
         max_weight = request.form['max-weight']
-        graph_type = request.form['graph-type']
+        graph_type = graph_types[request.form['graph-type']]
         if not 0.0 <= float(edge_prob) <= 1.0: # make sure edge_prob is a probability
             flash('Edge probability must be between 0 and 1')
         else:
@@ -56,9 +56,12 @@ def process_form(form):
 @app.route('/', methods=['GET', 'POST'])
 def template_response_with_data():
     print(request.form)
+    choices = {'Random':'k', 'Tree':'t'}
+    selected = request.form['graph-type']
+    state = {'choice': selected}
     template_data = {}
-    process_form(request.form)
-    return render_template('index.html', template_data=template_data)
+    process_form(request.form, choices)
+    return render_template('index.html', choices=list(choices.keys()), state=state)
 
 @app.context_processor
 def override_url_for():
