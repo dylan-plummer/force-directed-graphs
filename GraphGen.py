@@ -1,5 +1,6 @@
 import json
 import numpy as np
+import os
 
 def GenerateGraph(numVerts, density, maxWeight):
     nodes = [] ; links = []
@@ -14,5 +15,6 @@ def GenerateGraph(numVerts, density, maxWeight):
                 links.append({'source': x['name'], 'target': y['name'], 'value': w})      
     return {'links': links,'nodes': nodes} 
 
-def WriteToJSON(data,name):
-    with open(name+'.json','w') as f: json.dump(data,f)
+def GraphToJSON(data):
+    os.remove('graph.json')
+    with open('graph.json','w') as f: json.dump(data,f)
