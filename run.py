@@ -38,7 +38,7 @@ def template_response_with_data():
     template_data = {}
     try:
         num_verts = request.form['num-verts']
-        GraphToJSON(GenerateGraph(int(num_verts), 0.05, 10))
+        GraphToJSON(GenerateGraph(int(num_verts), 0.05, 10, 'k'))
     except TypeError as e1:
 	    print('Number of vertices must be an integer')
     except ValueError as e2:

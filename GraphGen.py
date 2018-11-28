@@ -56,12 +56,6 @@ def GenerateGraph(numVerts, density, maxWeight, style):
 
     return {'links': links,'nodes': nodes}
 
-
-G = GenerateGraph(30,.5,10,"t")
-#print(G)
-print("Nodes:"+str(G['nodes']))
-print("Links:"+str(G['links']))
-
 def GraphToJSON(data):
-    os.remove('graph.json')
-    with open('graph.json','w') as f: json.dump(data,f)
+    os.remove('static/graph.json')
+    with open('static/graph.json','w') as f: json.dump(data,f)
