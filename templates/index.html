@@ -39,18 +39,6 @@ b {
   box-shadow: 0px 0px 1px #777;
 }
 
-#num-verts {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-#edge-prob {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
-
 .outline {
     fill: none;
     stroke: #888888;
@@ -84,39 +72,25 @@ b {
     stroke-opacity: 1.0;
 }
 
-.slider {
-    -webkit-appearance: none;
+.column {
+    float: left;
+    width: 33%;
     display: block;
-    width: 50%;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 15px;
-    margin-bottom: 15px;
-    height: 15px;
-    border-radius: 5px;
-    background: #d3d3d3;
-    outline: none;
-    opacity: 0.7;
-    -webkit-transition: .2s;
-    transition: opacity .2s;
 }
 
-.slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    background: #4CAF50;
-    cursor: pointer;
+.row {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.slider::-moz-range-thumb {
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    background: #4CAF50;
-    cursor: pointer;
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
 }
 
 </style>
@@ -276,17 +250,28 @@ d3.json("/static/graph.json", drawGraph);
 </script>
 
 <form action="." method="post">
-        <ul>
-            <div align="center" id="num-verts">
-      			  Number of vertices:<br>
-      			  <input id="num-verts" type="text" name="num-verts" align="middle"><br>
-            </div>
-            <div align="center" class="slidecontainer" id="edge-prob">
-              Edge Probability:<br>
-              <input type="range" min="0" max="100" value="5" class="slider" id="prob-slider"><br>
-            </div>
-            <button id="ui-button" name="random-graph" align="middle">Random Graph</button>
-        </ul>
+  <ul>
+    <div class="row" align="middle">
+      <div class="column">
+  		  Number of vertices:<br>
+  		  <input type="text" name="num-verts"><br>
+        Edge Probability:<br>
+        <input type="text" name="edge-prob"><br>
+      </div>
+      <div class="column">
+        Max Edge Weight:<br>
+        <input type="text" name="max-weight"><br>
+      </div>
+      <div class="column">
+        Graph Type:<br>
+        <select>
+          <option value="t">Tree</option>
+          <option value="k">Random</option>
+        </select>
+      </div>
+    </div>
+      <button id="ui-button" name="random-graph">Random Graph</button>
+  </ul>
 </form>
 
 </body>
