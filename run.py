@@ -1,5 +1,5 @@
 import configparser
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, flash
 from GraphGen import GenerateGraph, GraphToJSON
 import mysql.connector
 
@@ -32,19 +32,32 @@ def sql_execute(sql):
     db.close()
 
 
+def process_form(form):
+    try:
+        num_verts = request.form['num-verts']
+        edge_prob = request.form['edge-prob']
+        max_weight = request.form['max-weight']
+        graph_type = request.form['graph-type']
+        if not 0.0 <= float(edge_prob) <= 1.0: # make sure edge_prob is a probability
+            flash('Edge probability must be between 0 and 1')
+        else:
+            GraphToJSON(GenerateGraph(int(num_verts), float(edge_prob), int(max_weight), graph_type))
+    except TypeError as e1:
+        print(e1)
+        flash('Number of vertices must be an integer')
+    except ValueError as e2:
+        print(e2)
+        flash('Number of vertices must not be empty')
+    except KeyError as e3:
+        print(e3)
+        print('Could not find the resource you selected')
+
+
 @app.route('/', methods=['GET', 'POST'])
 def template_response_with_data():
     print(request.form)
     template_data = {}
-    try:
-        num_verts = request.form['num-verts']
-        GraphToJSON(GenerateGraph(int(num_verts), 0.05, 10, 'k'))
-    except TypeError as e1:
-	    print('Number of vertices must be an integer')
-    except ValueError as e2:
-	    print('Number of vertices must not be empty')
-    except KeyError as e3:
-        print('Could not find the resource you selected')
+    process_form(request.form)
     return render_template('index.html', template_data=template_data)
 
 @app.context_processor
@@ -61,4 +74,5 @@ def dated_url_for(endpoint, **values):
     return url_for(endpoint, **values)
 
 if __name__ == '__main__':
+    app.secret_key = 'shhh it\'s a secret'
     app.run(host='127.3.4.1', port=3000, debug=True)

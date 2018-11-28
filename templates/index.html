@@ -244,6 +244,21 @@ function drawLinks(links) {
 <body>
 <div align="center" id="force"></div>
 
+<div class="container" style="min-height:100% width:80%">
+	{% with messages = get_flashed_messages() %}
+	  {% if messages %}
+	    {% for message in messages %}
+		  <div class="alert alert-warning alert-dismissible" role="alert">
+        <form action="." method="post">
+		      <button type="button" class="close" data-dismiss="alert" aria-label="Close" name="close-flash"><span aria-hidden="true">×</span></button>
+			{{message}}
+		  </div>
+		{% endfor %}
+	  {% endif %}
+	{% endwith %}
+
+	{% block body %}{% endblock %}
+</div>
 
 <script>
 d3.json("/static/graph.json", drawGraph);
@@ -254,19 +269,19 @@ d3.json("/static/graph.json", drawGraph);
     <div class="row" align="middle">
       <div class="column">
   		  Number of vertices:<br>
-  		  <input type="text" name="num-verts"><br>
+  		  <input type="text" name="num-verts" value="{{ request.form['num-verts'] }}"><br>
         Edge Probability:<br>
-        <input type="text" name="edge-prob"><br>
+        <input type="text" name="edge-prob" value="{{ request.form['edge-prob'] }}"><br>
       </div>
       <div class="column">
         Max Edge Weight:<br>
-        <input type="text" name="max-weight"><br>
+        <input type="text" name="max-weight" value="{{ request.form['max-weight'] }}"><br>
       </div>
       <div class="column">
         Graph Type:<br>
-        <select>
-          <option value="t">Tree</option>
+        <select name="graph-type" id="type">
           <option value="k">Random</option>
+          <option value="t">Tree</option>
         </select>
       </div>
     </div>
