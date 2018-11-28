@@ -8,7 +8,6 @@
 
 <!-- CSS Style //-->
 <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,900|Source+Code+Pro:300" rel="stylesheet" type="text/css">
-<link href="static/data.json" rel="graph-data">
 <style>
 body {
     font-family: 'Source Sans Pro', sans-serif;
@@ -226,14 +225,16 @@ function drawLinks(links) {
 
 
 <script>
-d3.json("static/data.json", drawGraph);
+d3.json("/static/graph.json", drawGraph);
 </script>
 
 <form action="." method="post">
         <ul>
+      			Number of vertices:<br>
+      			<input type="text" name="num-verts"><br>
             <button id="ui" name="random-graph">Random Graph</button>
         </ul>
 </form>
-		
+
 </body>
 </html>

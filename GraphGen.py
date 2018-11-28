@@ -16,5 +16,8 @@ def GenerateGraph(numVerts, density, maxWeight):
     return {'links': links,'nodes': nodes} 
 
 def GraphToJSON(data):
-    os.remove('graph.json')
-    with open('graph.json','w') as f: json.dump(data,f)
+    os.remove('static/graph.json')
+    with open('static/graph.json','w') as f: json.dump(data,f)
+	
+	
+GraphToJSON(GenerateGraph(50, 0.05, 10))
