@@ -44,30 +44,47 @@ def process_form(form, graph_types):
             GraphToJSON(GenerateGraph(int(num_verts), float(edge_prob), int(max_weight), graph_type))
     except TypeError as e1:
         print(e1)
-        #flash('Number of vertices must be an integer')
+        flash('Number of vertices must be an integer')
     except ValueError as e2:
         print(e2)
-        #flash('Number of vertices must not be empty')
+        flash('Number of vertices must not be empty')
     except KeyError as e3:
         print(e3)
         print('Could not find the resource you selected')
 
-@app.route('/', methods=['GET'])
-def template_get():
-    choices = {'Random':'k', 'Tree':'t'}
-    state = {'choice': 'Random'}
-    GraphToJSON(GenerateGraph(10, 0.01, 10, 'k'))
-    return render_template('index.html', choices=list(choices.keys()), state=state)
 
+def startup_form(request_form):
+    form = {}
+    try:
+        num_verts = request_form['num-verts']
+        form['num-verts'] = num_verts
+    except:
+        form['num-verts'] = 10
+    try:
+        edge_prob = request_form['edge-prob']
+        form['edge-prob'] = edge_prob
+    except:
+        form['edge-prob'] = 0.1
+    try:
+        max_weight = request_form['max-weight']
+        form['max_weight'] = max_weight
+    except:
+        form['max_weight'] = 10
+    try:
+        graph_type = request_form['graph-type']
+        form['graph-type'] = graph_type
+    except:
+        form['graph-type'] = 'Random'
+    print('form', form)
+    return form
 
-@app.route('/', methods=['POST'])
+@app.route('/', methods=['POST', 'GET'])
 def template_response_with_data():
-    print(request.form)
+    form = startup_form(request.form)
     choices = {'Random':'k', 'Tree':'t'}
-    selected = request.form['graph-type']
+    selected = form['graph-type']
     state = {'choice': selected}
-    template_data = {}
-    process_form(request.form, choices)
+    process_form(form, choices)
     return render_template('index.html', choices=list(choices.keys()), state=state)
 
 @app.context_processor
