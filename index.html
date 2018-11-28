@@ -21,7 +21,6 @@ b {
     font-weight: 900;
 }
 
-
 #ui {
   background-color: #bbb;
   padding: .5em;
@@ -147,7 +146,7 @@ function drawGraph(graph) {
         .size([width - margin, height - margin])
         .charge(-120)
         .linkDistance(function(d, i) {
-            return (d.source.group == d.target.group) ? 50 : 100;
+            return (d.source.group == d.target.group) ? 50 : 75;
         })
         .nodes(graph.nodes)
         .links(graph.links)
@@ -192,7 +191,7 @@ function drawNodes(nodes) {
         .attr("id", function(d, i) { return d.name; })
         .attr("cx", function(d, i) { return d.x; })
         .attr("cy", function(d, i) { return d.y; })
-        .attr("r",  function(d, i) { return 4; })
+        .attr("r",  function(d, i) { return 8; })
         .style("fill",   function(d, i) { return color(d.group); })
         .on("mouseover", function(d, i) { addTooltip(d3.select(this)); })
         .on("mouseout",  function(d, i) { d3.select("#tooltip").remove(); });
@@ -236,7 +235,7 @@ d3.json("data.json", drawGraph);
         <ul>
             <button id="ui" name="random-graph">Random Graph</button>
         </ul>
-        </form>
+</form>
 		
 </body>
 </html>
