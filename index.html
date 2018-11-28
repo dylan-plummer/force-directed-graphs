@@ -21,6 +21,28 @@ b {
     font-weight: 900;
 }
 
+
+#ui {
+  background-color: #bbb;
+  padding: .5em;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 16px;
+  text-decoration: none;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  border: none;
+}
+
+#ui:hover {
+  border: none;
+  background: orange;
+  box-shadow: 0px 0px 1px #777;
+}
+
 .outline {
     fill: none;
     stroke: #888888;
@@ -53,6 +75,7 @@ b {
     stroke-weight: 4px;
     stroke-opacity: 1.0;
 }
+
 </style>
 
 <script>
@@ -204,8 +227,16 @@ function drawLinks(links) {
 <body>
 <div align="center" id="force"></div>
 
+
 <script>
 d3.json("data.json", drawGraph);
 </script>
+
+<form action="." method="post">
+        <ul>
+            <button id="ui" name="random-graph">Random Graph</button>
+        </ul>
+        </form>
+		
 </body>
 </html>

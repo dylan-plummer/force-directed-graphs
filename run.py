@@ -40,7 +40,7 @@ def template_response_with_data():
     sql = "select id, title from book order by title"
     books = sql_query(sql)
     template_data['books'] = books
-    return render_template('home-w-data.html', template_data=template_data)
+    return render_template('index.html', template_data=template_data)
 
 if __name__ == '__main__':
     app.run(**config['app'])
