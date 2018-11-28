@@ -35,4 +35,4 @@ def template_response_with_data():
     return render_template('index.html', template_data=template_data)
 
 if __name__ == '__main__':
-    app.run(**config['app'])
+    app.run(host='127.3.4.1', port=3000, debug=True)
