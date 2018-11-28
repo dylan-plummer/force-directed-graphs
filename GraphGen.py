@@ -38,23 +38,29 @@ def GenerateGraph(numVerts, density, maxWeight, style, numGroups=5):
                     print(">>end")
                     w = np.random.randint(maxWeight)
                     links.append({'source': n['name'], 'target': r['name'], 'value': w})
+                print(N)
+                print(">>"+str(len(links)))
                 N=[]
             else:
-
                 print("child: "+str(N[:c]))
                 children = N[:c]
                 N = N[c:]
                 print(N)
                 print(len(N) - c, len(N))
                 p = np.random.randint(len(N)-c,len(N))
-
                 P = N[:p]+N[p+1:]
                 for child in children:
                     w = np.random.randint(maxWeight)
-                    links.append({'source':child['name'], 'target': child['name'], 'value': w})
+                    links.append({'source':child['name'], 'target': P['name'], 'value': w})
             print("L"+str(links))
 
     return {'links': links,'nodes': nodes}
+
+#GenerateGraph(20,.5,10,"t")
+
+
+
+
 
 def GraphToJSON(data):
     os.remove('static/graph.json')
