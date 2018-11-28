@@ -6,6 +6,19 @@
 <!-- JavaScript Libraries //-->
 <script src="http://d3js.org/d3.v3.min.js"></script>
 
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type=text/javascript>
+        $(function() {
+          $('a#test').bind('click', function() {
+            $.getJSON('/extract_cliques',
+                function(data) {
+                  //do nothing
+            });
+            return false;
+          });
+        });
+</script>
+
 <!-- CSS Style //-->
 <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,900|Source+Code+Pro:300" rel="stylesheet" type="text/css">
 <style>
@@ -18,7 +31,11 @@ b {
     font-weight: 900;
 }
 
-#ui-button {
+a, u {
+    text-decoration: none;
+}
+
+.ui-button {
   background-color: #bbb;
   padding: .5em;
   -moz-border-radius: 5px;
@@ -33,7 +50,7 @@ b {
   border: none;
 }
 
-#ui-button:hover {
+.ui-button:hover {
   border: none;
   background: orange;
   box-shadow: 0px 0px 1px #777;
@@ -284,7 +301,10 @@ d3.json("/static/graph.json", drawGraph);
         </select>
       </div>
     </div>
-      <button id="ui-button" name="random-graph">Random Graph</button>
+    <button class="ui-button" name="random-graph">Random Graph</button><br>
+    <a href=# id=test>
+      <button class="ui-button" name="extract-cliques">Extract Cliques</button>
+    </a><br>
   </ul>
 </form>
 

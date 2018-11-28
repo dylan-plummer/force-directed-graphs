@@ -1,11 +1,14 @@
 import configparser
-from flask import Flask, render_template, request, flash
+from flask import Flask, render_template, request, flash, redirect, url_for
 from GraphGen import GenerateGraph, GraphToJSON
 import mysql.connector
 
 # Read configuration from file.
 config = configparser.ConfigParser()
 config.read('config.ini')
+
+# Choices for types of graphs generated
+choices = {'Random':'k', 'Tree':'t'}
 
 # Set up application server.
 app = Flask(__name__)
@@ -78,14 +81,22 @@ def startup_form(request_form):
     print('form', form)
     return form
 
+
 @app.route('/', methods=['POST', 'GET'])
 def template_response_with_data():
     form = startup_form(request.form)
-    choices = {'Random':'k', 'Tree':'t'}
     selected = form['graph-type']
     state = {'choice': selected}
     process_form(form, choices)
     return render_template('index.html', choices=list(choices.keys()), state=state)
+
+
+@app.route('/extract_cliques', methods=['POST', 'GET'])
+def extract_cliques():
+    print('Cliques!')
+    GraphToJSON(GenerateGraph(100, 0.5, 10, 't'))
+    return render_template('index.html')
+
 
 @app.context_processor
 def override_url_for():
