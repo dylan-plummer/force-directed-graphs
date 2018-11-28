@@ -45,6 +45,12 @@ b {
   margin-right: auto;
 }
 
+#edge-prob {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .outline {
     fill: none;
     stroke: #888888;
@@ -76,6 +82,41 @@ b {
     stroke: red;
     stroke-weight: 4px;
     stroke-opacity: 1.0;
+}
+
+.slider {
+    -webkit-appearance: none;
+    display: block;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    height: 15px;
+    border-radius: 5px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #4CAF50;
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #4CAF50;
+    cursor: pointer;
 }
 
 </style>
@@ -237,8 +278,12 @@ d3.json("/static/graph.json", drawGraph);
 <form action="." method="post">
         <ul>
             <div align="center" id="num-verts">
-      			   Number of vertices:<br>
-      			   <input id="num-verts" type="text" name="num-verts" align="middle"><br>
+      			  Number of vertices:<br>
+      			  <input id="num-verts" type="text" name="num-verts" align="middle"><br>
+            </div>
+            <div align="center" class="slidecontainer" id="edge-prob">
+              Edge Probability:<br>
+              <input type="range" min="0" max="100" value="5" class="slider" id="prob-slider"><br>
             </div>
             <button id="ui-button" name="random-graph" align="middle">Random Graph</button>
         </ul>
