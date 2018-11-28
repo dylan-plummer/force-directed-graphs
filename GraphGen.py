@@ -7,12 +7,12 @@ import os
 #  - "t" : tree
 #  - "c" : components
 
-def GenerateGraph(numVerts, density, maxWeight, style):
+def GenerateGraph(numVerts, density, maxWeight, style, numGroups=5):
     nodes = [] ; links = []
 
     #generate nodes
     for x in range(numVerts):
-        nodes.append({'group': 1, 'name': x})
+        nodes.append({'group': np.random.randint(numGroups), 'name': x})
 
     #generate links
     if style == "k":
