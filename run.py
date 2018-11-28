@@ -44,22 +44,14 @@ def process_form(form, graph_types):
             GraphToJSON(GenerateGraph(int(num_verts), float(edge_prob), int(max_weight), graph_type))
     except TypeError as e1:
         print(e1)
-        #flash('Number of vertices must be an integer')
+        flash('Number of vertices must be an integer')
     except ValueError as e2:
         print(e2)
-        #flash('Number of vertices must not be empty')
+        flash('Number of vertices must not be empty')
     except KeyError as e3:
         print(e3)
         print('Could not find the resource you selected')
 
-'''
-@app.route('/', methods=['GET'])
-def template_get():
-    choices = {'Random':'k', 'Tree':'t'}
-    state = {'choice': 'Random'}
-    GraphToJSON(GenerateGraph(10, 0.01, 10, 'k'))
-    return render_template('index.html', choices=list(choices.keys()), state=state)
-'''
 
 def startup_form(request_form):
     form = {}
