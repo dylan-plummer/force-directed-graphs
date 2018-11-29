@@ -1,5 +1,6 @@
 import json
 import numpy as np
+import random
 import os
 
 # Styles
@@ -44,15 +45,20 @@ def GenerateGraph(numVerts, density, maxWeight, style, numGroups=5):
                     links.append({'source':child['name'], 'target': P['name'], 'value': w})
 
     elif style == "p": # Generate planar graph
-        N = np.copy(nodes)
-        root = np.random.choice(N, replace=False)
-        leg = np.random.choice(N, replace=False)
-        links.append({'source': root['name'], 'target': leg['name'], 'value': np.random.randint(maxWeight)})
-        for v in N:
-            root = np.random.choice(nodes)
-            leg = np.random.choice(nodes)
-            links.append({'source': v['name'], 'target': leg['name'], 'value': np.random.randint(maxWeight)})
-            links.append({'source': v['name'], 'target': root['name'], 'value': np.random.randint(maxWeight)})
+        A = nodes.copy()
+        B = nodes.copy()
+        random.shuffle(A)
+        random.shuffle(B)
+        for u in nodes:
+            leg = A.pop()
+            root = B.pop()
+            print(leg, root)
+            if np.random.binomial(1, density) == 1:
+                links.append({'source': root['name'], 'target': leg['name'], 'value': np.random.randint(maxWeight)})
+            if np.random.binomial(1, density) == 1:
+                links.append({'source': u['name'], 'target': root['name'], 'value': np.random.randint(maxWeight)})
+            elif np.random.binomial(1, density) == 1:
+                links.append({'source': u['name'], 'target': leg['name'], 'value': np.random.randint(maxWeight)})
 
 
 
