@@ -124,9 +124,22 @@ def get_metrics():
     Return a list of metric titles and values to be displayed below the graph.
     The list returned should be the exact string to be displayed.
     '''
-    metrics = ['Min Degree: x', 'Max Degree: y', 'Etc'] # Example list
-    return metrics
+    # ToDo:
+    # Get metrics from sql
 
+    minDeg = 0
+    maxDeg = 0
+    avgDeg = 0
+    minWgt = 0
+    maxWgt = 0
+    avgWgt = 0
+    lrgClq = 0
+    numClq = 0
+
+    metrics = ['Min Degree: '+minDeg, 'Max Degree: '+maxDeg, 'Average Degree: '+avgDeg,
+               'Min Weight: '+minWgt, 'Max Weight: '+maxWgt, 'Average Weight: '+avgWgt,
+               'Number of Cliques: '+numClq, 'Largest Clique: '+lrgClq]
+    return metrics
 
 @app.context_processor
 def override_url_for():
