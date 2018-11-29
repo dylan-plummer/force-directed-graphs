@@ -2,12 +2,19 @@ import json
 import numpy as np
 import random
 import os
+import networkx as nx
 
 # Styles
 #  - "k" : complete
 #  - "t" : tree
 #  - "p" : planar
 #  - "c" : components
+
+
+def GraphToJSON(data):
+    os.remove('static/graph.json')
+    with open('static/graph.json','w') as f: json.dump(data,f)
+
 
 def GenerateGraph(numVerts, density, maxWeight, style, numGroups=5):
     nodes = [] ; links = []
@@ -100,25 +107,50 @@ def GenerateGraph(numVerts, density, maxWeight, style, numGroups=5):
     return {'links': links,'nodes': nodes}
 
 
+def NodeNeighbors(nodeName, links):
+    l = []
+    for i in links:
+        if int(i['source']) == int(nodeName):
+            l.append(i['target'])
+            links.remove(i)
+        elif int(i['target']) == int(nodeName):
+            l.append(i['source'])
+            links.remove(i)
+    return l
+
 
 def FindCliques(graph_data):
     print("Finding Cliques -> Returns list list of nodes in each clique -> store in DB")
-    nodes = graph_data['nodes']
-    links = graph_data['links']
-
-
-
+    nodes = graph_data['nodes'] ; links = graph_data['links']
+    G = nx.Graph()
+    G.add_nodes_from(range(0,len(nodes)))
+    for i in links:
+        G.add_edge(int(i['source']),int(i['target']))
+    Cliques = []
+    for c in nx.find_cliques(G):
+        Cliques.append(c)
+    return Cliques
 
 
 def ExtractCliques(clique_array):
     print("Recoloring Cliques")
-
-
-
-
-def GraphToJSON(data):
-    os.remove('static/graph.json')
-    with open('static/graph.json','w') as f: json.dump(data,f)
-
-
-GenerateGraph(21,1,10,"c")
+    with open("static/graph.json", 'r') as f:
+        graph_data = json.loads(f.read())
+    nodes = graph_data['nodes']
+    links = graph_data['links']
+    # recolor whole graph
+    newNodes = []
+    for n in nodes:
+        new = {'name':n['name'],'group': 0}
+        newNodes.append(new)
+    nodes = newNodes
+    color = 1
+    # color each clique uniquely
+    for clique in clique_array:
+        for v in clique:
+            for i in nodes:
+                if int(i['name']) == int(v):
+                    nodes[nodes.index(i)] = {'name': i['name'], 'group': color}
+        color += 1
+    graph_data = [nodes,links]
+    GraphToJSON(graph_data)
