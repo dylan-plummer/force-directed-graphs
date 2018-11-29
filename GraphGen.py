@@ -4,8 +4,9 @@ import random
 import os
 
 # Styles
-#  - "k" : complete graph
+#  - "k" : complete
 #  - "t" : tree
+#  - "p" : planar
 #  - "c" : components
 
 def GenerateGraph(numVerts, density, maxWeight, style, numGroups=5):
@@ -39,7 +40,8 @@ def GenerateGraph(numVerts, density, maxWeight, style, numGroups=5):
                 N=[]
             else:
                 children = N[:c]; N = N[c:]
-                P = N[np.random.randint(len(N))]
+                pIndex = np.random.randint(len(N))
+                P = N[pIndex]
                 for child in children:
                     w = np.random.randint(maxWeight)
                     links.append({'source':child['name'], 'target': P['name'], 'value': w})
@@ -60,10 +62,55 @@ def GenerateGraph(numVerts, density, maxWeight, style, numGroups=5):
             elif np.random.binomial(1, density) == 1:
                 links.append({'source': u['name'], 'target': leg['name'], 'value': np.random.randint(maxWeight)})
 
-
-
     elif style == "c": # Generate Connected Components
         print("Generating Connected Components...")
+        N = nodes ; A = []
+        C = int(len(N)*density*.33)
+        if C == 0: C==1
+        print(C)
+        # Initial blob
+        c = np.random.randint(1,C)
+        print("c>" + str(c))
+        if c >= len(N):
+            blob = N ; N = []
+        else:
+            blob = N[:c] ; N = N[c:]
+        print("<b>"+str(len(blob))+str(blob))
+        for x in blob:
+            for y in blob[x['name']+1:]:
+                print("link")
+                if np.random.binomial(1, density) == 1:
+                    w = np.random.randint(maxWeight)
+                    links.append({'source': x['name'], 'target': y['name'], 'value': w})
+        A.extend(blob)
+        print(len(links), len(A))
+        while N != []:
+            print("----")
+            print(len(N))
+            c = np.random.randint(1,C)
+            print("c>" + str(c))
+            if c >= len(N):
+                blob = N; N = []
+            else:
+                blob = N[:c]; N = N[c:]
+            print("<b>" + str(len(blob)))
+            for i in blob:
+                print(blob)
+                for j in blob[i['name'] + 1:]:
+                    print("link")
+                    if np.random.binomial(1, density) == 1:
+                        w = np.random.randint(maxWeight)
+                        links.append({'source': i['name'], 'target': j['name'], 'value': w})
+            c = np.random.randint(len(A)-1)
+            k = A[c] ; r = blob[0]
+            w = np.random.randint(maxWeight)
+            links.append({'source': r['name'], 'target': k['name'], 'value': w})
+            A.extend(blob)
+            print(len(links), len(A))
+
+
+
+
 
 
 
@@ -74,3 +121,6 @@ def GenerateGraph(numVerts, density, maxWeight, style, numGroups=5):
 def GraphToJSON(data):
     os.remove('static/graph.json')
     with open('static/graph.json','w') as f: json.dump(data,f)
+
+
+GenerateGraph(50,1,10,"c")
