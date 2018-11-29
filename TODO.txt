@@ -1,5 +1,7 @@
 ToDo:
-- Store Graphs in SQL as:
+Banner text: GRAPHMON JOHNSQL
+
+Store Graphs in SQL as:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 DB = Graph
 Tables:
@@ -25,14 +27,15 @@ Metrics W/SQL Queries:
     -Largest Clique
     -Number of Cliques
 
-- Graph is generated:
-    ->FindCliques
-    ->Delete DB, create new DB
-    ->Store graph data and cliques in DB
-    ->Saved graph to file
-    ->Get metrics from SQL
-    ->display graph and metrics
+Dataflow:
+    - Graph is generated:
+        ->FindCliques
+        ->Delete DB, create new DB
+        ->Store graph data and cliques in DB
+        ->Saved graph to file
+        ->Get metrics from SQL
+        ->display graph and metrics
 
-- Extract Cliques
-    ->Get Cliques from SQL
-    ->ExtractCliques, updates file with new coloring
+    - Extract Cliques
+        ->Get Cliques from SQL
+        ->ExtractCliques, updates file with new coloring
