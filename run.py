@@ -60,17 +60,17 @@ def startup_form(request_form):
     form = {}
     try:
         num_verts = request_form['num-verts']
-        form['num-verts'] = num_verts
+        form['num-verts'] = int(num_verts)
     except:
         form['num-verts'] = 10
     try:
         edge_prob = request_form['edge-prob']
-        form['edge-prob'] = edge_prob
+        form['edge-prob'] = float(edge_prob)
     except:
         form['edge-prob'] = 0.1
     try:
         max_weight = request_form['max-weight']
-        form['max_weight'] = max_weight
+        form['max_weight'] = int(max_weight)
     except:
         form['max_weight'] = 10
     try:
@@ -78,6 +78,11 @@ def startup_form(request_form):
         form['graph-type'] = graph_type
     except:
         form['graph-type'] = 'Random'
+    try:
+        extract_cliques = request_form['cliques']
+        form['cliques'] = int(extract_cliques)
+    except:
+        form['cliques'] = 0
     print('form', form)
     return form
 
@@ -87,15 +92,15 @@ def template_response_with_data():
     form = startup_form(request.form)
     selected = form['graph-type']
     state = {'choice': selected}
-    process_form(form, choices)
+    if form['cliques'] == 1:
+        extract_cliques()
+    else:
+        process_form(form, choices)
     return render_template('index.html', choices=list(choices.keys()), state=state)
 
 
-@app.route('/extract_cliques', methods=['POST', 'GET'])
 def extract_cliques():
     print('Cliques!')
-    GraphToJSON(GenerateGraph(100, 0.5, 10, 't'))
-    return render_template('index.html')
 
 
 @app.context_processor
