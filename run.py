@@ -116,13 +116,12 @@ def extract_cliques():
     Take the current graph.json file and recolor the nodes to show Cliques
     The graph display is updated after this function is called above
     '''
-    print('Cliques!')
     ExtractCliques(FindCliques())
 
 def get_metrics():
     '''
     Return a list of metric titles and values to be displayed below the graph.
-    The list returned should be the exact string to be displayed.
+    The elements of the list returned should be the exact string to be displayed.
     '''
     # ToDo:
     # Get metrics from sql
