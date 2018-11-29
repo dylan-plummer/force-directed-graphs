@@ -119,8 +119,10 @@ def NodeNeighbors(nodeName, links):
     return l
 
 
-def FindCliques(graph_data):
+def FindCliques():
     print("Finding Cliques -> Returns list list of nodes in each clique -> store in DB")
+    with open("static/graph.json", 'r') as f:
+        graph_data = json.loads(f.read())
     nodes = graph_data['nodes'] ; links = graph_data['links']
     G = nx.Graph()
     G.add_nodes_from(range(0,len(nodes)))
@@ -149,8 +151,8 @@ def ExtractCliques(clique_array):
     for clique in clique_array:
         for v in clique:
             for i in nodes:
-                if int(i['name']) == int(v):
+                if (i['name']) == (v):
                     nodes[nodes.index(i)] = {'name': i['name'], 'group': color}
         color += 1
-    graph_data = [nodes,links]
+    graph_data = {'nodes':nodes, 'links':links}
     GraphToJSON(graph_data)

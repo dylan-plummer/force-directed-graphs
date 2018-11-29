@@ -1,6 +1,6 @@
 import configparser
 from flask import Flask, render_template, request, flash, redirect, url_for
-from GraphGen import GenerateGraph, GraphToJSON
+from GraphGen import GenerateGraph, GraphToJSON, FindCliques, ExtractCliques
 import mysql.connector
 
 # Read configuration from file.
@@ -117,13 +117,14 @@ def extract_cliques():
     The graph display is updated after this function is called above
     '''
     print('Cliques!')
+    ExtractCliques(FindCliques())
 
 def get_metrics():
     '''
     Return a list of metric titles and values to be displayed below the graph.
     The list returned should be the exact string to be displayed.
     '''
-    metrics = ['Min Degree: x', 'Max Degree: y', 'Etc']
+    metrics = ['Min Degree: x', 'Max Degree: y', 'Etc'] # Example list
     return metrics
 
 
