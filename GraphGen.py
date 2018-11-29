@@ -103,7 +103,6 @@ def GenerateGraph(numVerts, density, maxWeight, style, numGroups=5):
             w = np.random.randint(maxWeight)
             links.append({'source': r['name'], 'target': k['name'], 'value': w})
             A.extend(blob)
-
     return {'links': links,'nodes': nodes}
 
 
@@ -130,7 +129,8 @@ def FindCliques():
         G.add_edge(int(i['source']),int(i['target']))
     Cliques = []
     for c in nx.find_cliques(G):
-        Cliques.append(c)
+        if len(c) != 2:
+            Cliques.append(c)
     return Cliques
 
 

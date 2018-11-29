@@ -1,19 +1,38 @@
 ToDo:
-- Generate connected component graphs
 - Store Graphs in SQL as:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 DB = Graph
-	-Nodes-		-Links-
-	ID		    Source  <Foreign Node ID>
-	Group		Target  <Foreign Node ID>
-	Degree		Weight
+Tables:
+	=Node=                             =Link=
+	-ID	    <int, unique primary>       -Source  <Foreign Node ID>
+	-Group  <int>                       -Target  <Foreign Node ID>
+	-Degree <int                        -Weight  <int>
 
-	-Cliques-
-	ID			       ===> Get cliques in backend, store in SQL immediately
-	Members <xml{}>			Front End: "Extract Cliques" button, refresh graph
-						    so that each clique is colored but
-						    everything else is black
+	=Cliques=
+	 -ID       <int, unique primary>
+	 -Size     <int>
+	 -Members  <xml>
 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-	
-	
-		
+Metrics W/SQL Queries:
+    -Min Degree
+    -Max Degree
+    -Average Degree
+    -Min Weight
+    -Max Weight
+    -Average Weight
+    -Largest Clique
+    -Number of Cliques
+
+- Graph is generated:
+    ->FindCliques
+    ->Delete DB, create new DB
+    ->Store graph data and cliques in DB
+    ->Saved graph to file
+    ->Get metrics from SQL
+    ->display graph and metrics
+
+- Extract Cliques
+    ->Get Cliques from SQL
+    ->ExtractCliques, updates file with new coloring
