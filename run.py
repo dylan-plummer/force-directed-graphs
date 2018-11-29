@@ -103,6 +103,8 @@ def template_response_with_data():
     form = startup_form(request.form)
     selected = form['graph-type']
     state = {'choice': selected}
+    sql = 'insert into node(id, color, name) values (0, 1, 0)'
+    sql_execute(sql)
     if form['cliques'] == 1:
         extract_cliques()
     else:
@@ -135,9 +137,9 @@ def get_metrics():
     lrgClq = 0
     numClq = 0
 
-    metrics = ['Min Degree: '+minDeg, 'Max Degree: '+maxDeg, 'Average Degree: '+avgDeg,
-               'Min Weight: '+minWgt, 'Max Weight: '+maxWgt, 'Average Weight: '+avgWgt,
-               'Number of Cliques: '+numClq, 'Largest Clique: '+lrgClq]
+    metrics = ['Min Degree: '+ str(minDeg), 'Max Degree: '+ str(maxDeg), 'Average Degree: '+ str(avgDeg),
+               'Min Weight: '+ str(minWgt), 'Max Weight: '+ str(maxWgt), 'Average Weight: '+ str(avgWgt),
+               'Number of Cliques: '+ str(numClq), 'Largest Clique: '+ str(lrgClq)]
     return metrics
 
 @app.context_processor
