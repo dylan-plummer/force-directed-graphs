@@ -80,32 +80,22 @@ def GenerateGraph(numVerts, density, maxWeight, style, numGroups=5):
                     links.append({'source': x['name'], 'target': y['name'], 'value': w})
         A.extend(blob)
 
-        print(len(links), len(A))
-
         while N != []:
-            print("----")
-            print(len(N))
             c = np.random.randint(1,C)
-            print("c>" + str(c))
             if c >= len(N):
                 blob = N; N = []
             else:
                 blob = N[:c]; N = N[c:]
-            print("<b>" + str(len(blob)), len(N))
             for i in blob:
-                print(blob)
                 for j in blob[blob.index(i) + 1:]:
-                    print("link")
                     if np.random.binomial(1, density) == 1:
                         w = np.random.randint(maxWeight)
                         links.append({'source': i['name'], 'target': j['name'], 'value': w})
-            c = np.random.randint(len(A)-1)
+            c = np.random.randint(len(A))
             k = A[c] ; r = blob[0]
             w = np.random.randint(maxWeight)
             links.append({'source': r['name'], 'target': k['name'], 'value': w})
             A.extend(blob)
-            print(len(links), len(A))
-
 
     return {'links': links,'nodes': nodes}
 
@@ -115,6 +105,7 @@ def FindCliques(graph_data):
     print("Finding Cliques -> Returns list list of nodes in each clique -> store in DB")
     nodes = graph_data['nodes']
     links = graph_data['links']
+
 
 
 
@@ -130,4 +121,4 @@ def GraphToJSON(data):
     with open('static/graph.json','w') as f: json.dump(data,f)
 
 
-GenerateGraph(50,1,10,"c")
+GenerateGraph(21,1,10,"c")
