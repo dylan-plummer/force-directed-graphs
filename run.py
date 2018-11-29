@@ -8,7 +8,7 @@ config = configparser.ConfigParser()
 config.read('config.ini')
 
 # Choices for types of graphs generated
-choices = {'Random':'k', 'Tree':'t', 'Planar':'p'}
+choices = {'Random':'k', 'Tree':'t', 'Planar':'p', 'Component':'c'}
 
 # Set up application server.
 app = Flask(__name__)
@@ -36,6 +36,9 @@ def sql_execute(sql):
 
 
 def process_form(form, graph_types):
+    '''
+    Generates a graph based on the user entered values
+    '''
     try:
         num_verts = request.form['num-verts']
         edge_prob = request.form['edge-prob']
@@ -57,6 +60,10 @@ def process_form(form, graph_types):
 
 
 def startup_form(request_form):
+    '''
+    Set form values to previously entered values
+    If none, set to default values
+    '''
     form = {}
     try:
         num_verts = request_form['num-verts']
@@ -89,6 +96,10 @@ def startup_form(request_form):
 
 @app.route('/', methods=['POST', 'GET'])
 def template_response_with_data():
+    '''
+    Refreshes and renders the page when opening the site and updating the graph
+    Extracts cliques if the user checked the box
+    '''
     form = startup_form(request.form)
     selected = form['graph-type']
     state = {'choice': selected}
@@ -96,11 +107,24 @@ def template_response_with_data():
         extract_cliques()
     else:
         process_form(form, choices)
-    return render_template('index.html', choices=list(choices.keys()), state=state)
+    metrics = get_metrics()
+    return render_template('index.html', choices=list(choices.keys()), state=state, metrics=metrics)
 
 
 def extract_cliques():
+    '''
+    Take the current graph.json file and recolor the nodes to show Cliques
+    The graph display is updated after this function is called above
+    '''
     print('Cliques!')
+
+def get_metrics():
+    '''
+    Return a list of metric titles and values to be displayed below the graph.
+    The list returned should be the exact string to be displayed.
+    '''
+    metrics = ['Min Degree: x', 'Max Degree: y', 'Etc']
+    return metrics
 
 
 @app.context_processor

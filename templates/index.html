@@ -100,8 +100,8 @@ a, u {
 </style>
 
 <script>
-var width  = 1280;
-var height = 720;
+var width  = 640;
+var height = 480;
 var margin = 20;
 var pad = margin / 2;
 var color = d3.scale.category20();
@@ -267,7 +267,6 @@ d3.json("/static/graph.json", drawGraph);
 </script>
 
 <form action="." method="post">
-  <ul>
     <div class="row" align="middle">
       <div class="column">
   		  Number of vertices:<br>
@@ -290,8 +289,21 @@ d3.json("/static/graph.json", drawGraph);
       </div>
     </div>
     <button class="ui-button" name="random-graph">Update</button><br>
-  </ul>
 </form>
+<br>
+<div class="row" align="middle">
+  <div class="column">
+    <small>Project for EECS 341 at CWRU</small>
+  </div>
+  <div class="column">
+    {% for metric in metrics %}
+      {{ metric }}<br>
+    {% endfor %}
+  </div>
+  <div class="column">
+    <small>Dylan Plummer, Michael Tucci, Kevin Szmyd, Lucas Invernizzi</small>
+  </div>
+</div>
 
 </body>
 </html>
