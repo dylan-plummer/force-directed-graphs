@@ -43,6 +43,19 @@ def GenerateGraph(numVerts, density, maxWeight, style, numGroups=5):
                     w = np.random.randint(maxWeight)
                     links.append({'source':child['name'], 'target': P['name'], 'value': w})
 
+    elif style == "ch": # Generate chordal graph
+        N = np.copy(nodes)
+        root = np.random.choice(N, replace=False)
+        leg = np.random.choice(N, replace=False)
+        links.append({'source': root['name'], 'target': leg['name'], 'value': np.random.randint(maxWeight)})
+        for v in N:
+            root = np.random.choice(nodes)
+            leg = np.random.choice(nodes)
+            links.append({'source': v['name'], 'target': leg['name'], 'value': np.random.randint(maxWeight)})
+            links.append({'source': v['name'], 'target': root['name'], 'value': np.random.randint(maxWeight)})
+
+
+
     elif style == "c": # Generate Connected Components
         print("Generating Connected Components...")
 

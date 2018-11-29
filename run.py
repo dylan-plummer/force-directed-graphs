@@ -8,7 +8,7 @@ config = configparser.ConfigParser()
 config.read('config.ini')
 
 # Choices for types of graphs generated
-choices = {'Random':'k', 'Tree':'t'}
+choices = {'Random':'k', 'Tree':'t', 'Chordal':'ch'}
 
 # Set up application server.
 app = Flask(__name__)
