@@ -149,10 +149,11 @@ def ExtractCliques(clique_array):
     color = 1
     # color each clique uniquely
     for clique in clique_array:
-        for v in clique:
-            for i in nodes:
-                if (i['name']) == (v):
-                    nodes[nodes.index(i)] = {'name': i['name'], 'group': color}
-        color += 1
+        if len(clique) > 2:
+            for v in clique:
+                for i in nodes:
+                    if (i['name']) == (v):
+                        nodes[nodes.index(i)] = {'name': i['name'], 'group': color}
+            color += 1
     graph_data = {'nodes':nodes, 'links':links}
     GraphToJSON(graph_data)
