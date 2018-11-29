@@ -3,12 +3,12 @@ ToDo:
 - Store Graphs in SQL as:
 DB = Graph
 	-Nodes-		-Links-
-	ID		Source  <Foreign Node ID>
+	ID		    Source  <Foreign Node ID>
 	Group		Target  <Foreign Node ID>
 	Degree		Weight
 
 	-Cliques-
-	ID			===> Get cliques in backend, store in SQL immediately
+	ID			       ===> Get cliques in backend, store in SQL immediately
 	Members <xml{}>			Front End: "Extract Cliques" button, refresh graph
 						    so that each clique is colored but
 						    everything else is black

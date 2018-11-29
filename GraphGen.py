@@ -67,23 +67,21 @@ def GenerateGraph(numVerts, density, maxWeight, style, numGroups=5):
         N = nodes ; A = []
         C = int(len(N)*density*.33)
         if C == 0: C==1
-        print(C)
         # Initial blob
         c = np.random.randint(1,C)
-        print("c>" + str(c))
         if c >= len(N):
             blob = N ; N = []
         else:
             blob = N[:c] ; N = N[c:]
-        print("<b>"+str(len(blob))+str(blob))
         for x in blob:
             for y in blob[x['name']+1:]:
-                print("link")
                 if np.random.binomial(1, density) == 1:
                     w = np.random.randint(maxWeight)
                     links.append({'source': x['name'], 'target': y['name'], 'value': w})
         A.extend(blob)
+
         print(len(links), len(A))
+
         while N != []:
             print("----")
             print(len(N))
@@ -93,10 +91,10 @@ def GenerateGraph(numVerts, density, maxWeight, style, numGroups=5):
                 blob = N; N = []
             else:
                 blob = N[:c]; N = N[c:]
-            print("<b>" + str(len(blob)))
+            print("<b>" + str(len(blob)), len(N))
             for i in blob:
                 print(blob)
-                for j in blob[i['name'] + 1:]:
+                for j in blob[blob.index(i) + 1:]:
                     print("link")
                     if np.random.binomial(1, density) == 1:
                         w = np.random.randint(maxWeight)
@@ -109,13 +107,22 @@ def GenerateGraph(numVerts, density, maxWeight, style, numGroups=5):
             print(len(links), len(A))
 
 
-
-
-
-
-
-
     return {'links': links,'nodes': nodes}
+
+
+
+def FindCliques(graph_data):
+    print("Finding Cliques -> Returns list list of nodes in each clique -> store in DB")
+    nodes = graph_data['nodes']
+    links = graph_data['links']
+
+
+
+
+def ExtractCliques(clique_array):
+    print("Recoloring Cliques")
+
+
 
 
 def GraphToJSON(data):
