@@ -43,7 +43,7 @@ def GenerateGraph(numVerts, density, maxWeight, style, numGroups=5):
                     w = np.random.randint(maxWeight)
                     links.append({'source':child['name'], 'target': P['name'], 'value': w})
 
-    elif style == "ch": # Generate chordal graph
+    elif style == "p": # Generate planar graph
         N = np.copy(nodes)
         root = np.random.choice(N, replace=False)
         leg = np.random.choice(N, replace=False)
