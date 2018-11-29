@@ -6,13 +6,13 @@ Store Graphs in SQL as:
 DB = Graph
 Tables:
 	=Node=                             =Link=
-	-ID	    <int, unique primary>       -Source  <Foreign Node ID>
+	-ID	    <int, unique primary>   -Source  <Foreign Node ID>
 	-Group  <int>                       -Target  <Foreign Node ID>
 	-Degree <int                        -Weight  <int>
 
-	=Cliques=
+	=Clique=
 	 -ID       <int, unique primary>
-	 -Size     <int>
+	 -Ammo     <int>
 	 -Members  <xml>
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
