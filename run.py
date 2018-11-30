@@ -84,7 +84,7 @@ def process_form(form, graph_types):
                 insert_edge(int(l['source'])+1, int(l['target'])+1, int(l['value']))
             C = FindCliques()
             for c in C:
-                print("Adding Clique to SLQ: ", str(json.dump(c)))
+                print("Adding Clique to SLQ: ", str(c))
                 insert_clique(len(C),c)
 
     except TypeError as e1:
