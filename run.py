@@ -159,7 +159,7 @@ def insert_vert(name, color, degree):
     '''
     Insert vertex of specific color and degree into the database.
     '''
-    sql = 'INSERT INTO VERT(ID, COLOR, DEGREE) VALUES (' + int(name) + ', ' + str(color) + ', ' + str(degree) + ')'
+    sql = 'INSERT INTO VERT(ID, COLOR, DEGREE) VALUES (' + str(int(name)) + ', ' + str(color) + ', ' + str(degree) + ')'
     sql_execute(sql)
 
 def insert_edge(sourceID, targetID, weight):
