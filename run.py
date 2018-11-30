@@ -85,7 +85,7 @@ def process_form(form, graph_types):
             C = FindCliques()
             for c in C:
                 print("Adding Clique to SLQ: ", str(c))
-                insert_clique(len(C),c)
+                insert_clique(len(C),str(c))
 
     except TypeError as e1:
         print(e1)
