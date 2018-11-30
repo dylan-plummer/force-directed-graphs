@@ -13,7 +13,7 @@ Tables:
 	=Clique=
 	 -ID       <int, unique primary>
 	 -Ammo     <int>
-	 -Members  <xml>
+	 -Members  <json>
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
