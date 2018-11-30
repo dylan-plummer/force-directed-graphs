@@ -73,8 +73,8 @@ def process_form(form, graph_types):
             print("Resetting DB")
             reset_db()
             for n in G['nodes']:
+                d = 0
                 for l in G['links']:
-                    d = 0
                     if l['target'] == n['name'] or l['source'] == n['name']:
                         d += 1
                 print("Adding Node to SQL: ", n,d)
