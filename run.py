@@ -262,11 +262,11 @@ def get_metrics():
     # ToDo:
     # Get metrics from sql
 
-    minDeg = get_lowest_degree()[2]
-    maxDeg = get_highest_degree()[2]
+    minDeg = get_lowest_degree()[0].split(",")[2]
+    maxDeg = get_highest_degree()[0].split(",")[2]
     avgDeg = get_avg_degree()[0]
-    minWgt = get_lowest_weight()[2]
-    maxWgt = get_highest_weight()[2]
+    minWgt = get_lowest_weight()[0].split(",")[2]
+    maxWgt = get_highest_weight()[0].split(",")[2]
     avgWgt = get_avg_weight()[0]
     lrgClq = get_largest_clique()
     numClq = get_clique_amt()
