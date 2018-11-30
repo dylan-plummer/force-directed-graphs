@@ -5,6 +5,7 @@ from GraphGen import GenerateGraph, GraphToJSON, FindCliques, ExtractCliques
 import mysql.connector
 import json
 
+
 # Read configuration from file.
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -36,16 +37,23 @@ def sql_execute(sql):
     cursor.close()
     db.close()
 
-#returns raw output from sql query
-def sql_query(sql):
+def sql_execute_file(sql):
     db = mysql.connector.connect(**config['mysql.connector'])
     cursor = db.cursor()
-    cursorStore = cursor.execute(sql)
-    db.commit()
-    cursor.close()
+    fd = open(sql, 'r')
+    sqlFile = fd.read()
+    fd.close()
+    sqlCommands = sqlFile.split(';')
+
+    for command in sqlCommands:
+        try:
+            if command.strip() != '':
+                cursor.execute(command)
+        except IOError:
+            print("Command skipped: ")
     db.close()
-    return cursorStore
-            
+
+
 def process_form(form, graph_types):
     '''
     Generates a graph based on the user entered values
@@ -143,8 +151,7 @@ def reset_db():
     '''
     Resets the database
     '''
-    sql = 'source setup.sql'
-    sql_execute(sql)
+    sql_execute_file('setup_no_usr.sql')
 
 def insert_vert(color, degree):
     '''
@@ -173,14 +180,14 @@ def get_lowest_degree():
     '''
     Get the lowest degree from the database.
     '''
-    sql = 'SELECT TOP 1 * FROM VERT ORDER BY DEGREE'
+    sql = 'SELECT * FROM VERT ORDER BY DEGREE LIMIT 1'
     return sql_query(sql)
 
 def get_highest_degree():
     '''
     Get the highest degree from the database.
     '''
-    sql = 'SELECT TOP 1 * FROM VERT ORDER BY DEGREE DESC'
+    sql = 'SELECT * FROM VERT ORDER BY DEGREE DESC LIMIT 1'
     return sql_query(sql)
 
 def get_avg_degree():
@@ -194,14 +201,14 @@ def get_lowest_weight():
     '''
     Get the edge with the lowest weight from the database.
     '''
-    sql = 'SELECT TOP 1 * FROM EDGE ORDER BY WEIGHT'
+    sql = 'SELECT * FROM EDGE ORDER BY WEIGHT LIMIT 1'
     return sql_query(sql)
 
 def get_highest_weight():
     '''
     Get the edge with the highest weight from the database.
     '''
-    sql = 'SELECT TOP 1 * FROM EDGE ORDER BY WEIGHT DESC'
+    sql = 'SELECT * FROM EDGE ORDER BY WEIGHT DESC LIMIT 1'
     return sql_query(sql)
 
 def get_avg_weight():
@@ -215,7 +222,7 @@ def get_largest_clique():
     '''
     Get the largest clique from database.
     '''
-    sql = 'SELECT TOP 1 * FROM CLIQUE ORDER BY AMMO'
+    sql = 'SELECT * FROM CLIQUE ORDER BY AMMO LIMIT 1'
     return sql_query(sql)
 
 def get_clique_amt():
