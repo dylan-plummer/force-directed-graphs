@@ -266,12 +266,12 @@ def get_metrics():
     try:
         minDeg = get_lowest_degree()[0][2]
         maxDeg = get_highest_degree()[0][2]
-        avgDeg = get_avg_degree()[0]
+        avgDeg = get_avg_degree()[0][0]
         minWgt = get_lowest_weight()[0][2]
         maxWgt = get_highest_weight()[0][2]
-        avgWgt = get_avg_weight()[0]
+        avgWgt = get_avg_weight()[0][0]
         lrgClq = get_largest_clique()[0]
-        numClq = get_clique_amt()
+        numClq = get_clique_amt()[0][0]
     except IndexError:
         minDeg = "null, pls refresh"
         maxDeg = "null, pls refresh"
