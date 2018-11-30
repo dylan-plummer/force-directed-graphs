@@ -77,8 +77,8 @@ def process_form(form, graph_types):
                     d = 0
                     if l['target'] == n['name'] or l['source'] == n['name']:
                         d += 1
-                insert_vert(int(n['group']),int(d))
                 print("Adding Node to SQL: ", n,d)
+                insert_vert(int(n['group']),int(d))
             for l in G['links']:
                 print("Adding Link to SQL: ",int(l['source']), int(l['target']), int(l['value']))
                 insert_edge(int(l['source']), int(l['target']), int(l['value']))
@@ -142,8 +142,6 @@ def template_response_with_data():
     form = startup_form(request.form)
     selected = form['graph-type']
     state = {'choice': selected}
-    sql = 'insert into VERT(ID, COLOR, DEGREE) values (0, 1, 0)'
-    sql_execute(sql)
     if form['cliques'] == 1:
         extract_cliques()
     else:
