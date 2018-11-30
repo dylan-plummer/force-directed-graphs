@@ -80,8 +80,8 @@ def process_form(form, graph_types):
                 insert_vert(int(n['group']),int(d))
                 print("Adding Node to SQL: ", n,d)
             for l in G['links']:
+                print("Adding Link to SQL: ",int(l['source']), int(l['target']), int(l['value']))
                 insert_edge(int(l['source']), int(l['target']), int(l['value']))
-                print("Adding Link to SQL: ", l)
             C = FindCliques()
             for c in C:
                 print("Adding Clique to SLQ: ", str(json.dump(c)))
