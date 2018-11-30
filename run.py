@@ -34,7 +34,16 @@ def sql_execute(sql):
     cursor.close()
     db.close()
 
-
+#returns raw output from sql query
+def sql_query(sql):
+    db = mysql.connector.connect(**config['mysql.connector'])
+    cursor = db.cursor()
+    cursorStore = cursor.execute(sql)
+    db.commit()
+    cursor.close()
+    db.close()
+    return cursorStore
+            
 def process_form(form, graph_types):
     '''
     Generates a graph based on the user entered values
@@ -123,24 +132,94 @@ def reset_db();
 
 def insert_vert(color, degree):
     '''
-    Insert vertex of specific color and degree into database
+    Insert vertex of specific color and degree into the database.
     '''
     sql = 'INSERT INTO VERT(ID, COLOR, DEGREE) VALUES (0, ' + color + ', ' + degree + ')'
     sql_execute(sql)
 
 def insert_edge(sourceID, targetID):
     '''
-    Insert edge of specific source and target id as well as weight into database
+    Insert edge of specific source and target id as well as weight
+    into the database.
     '''
     sql = 'INSERT INTO EDGE(SOURCE, TARGET, WEIGHT) VALUES (' + sourceID + ', ' + targetID + ', ' + weight + ')'
     sql_execute(sql)
 
 def insert_clique(weight, members):
     '''
-    Insert edge of specific source and target id as well as weight into database
+    Insert clique with size as weight and members, members should be
+    a LONGTEXT complient JSON file.
     '''
     sql = 'INSERT INTO CLIQUE(ID, AMMO, MEMBERS) VALUES (0, ' + weight + ', ' + members + ')'
     sql_execute(sql)
+
+def get_lowest_degree():
+    '''
+    Get the lowest degree from the database.
+    '''
+    sql = 'SELECT TOP 1 * FROM VERT ORDER BY DEGREE'
+    return sql_query(sql)
+
+def get_highest_degree():
+    '''
+    Get the highest degree from the database.
+    '''
+    sql = 'SELECT TOP 1 * FROM VERT ORDER BY DEGREE DESC'
+    return sql_query(sql)
+
+def get_avg_degree():
+    '''
+    Get the average of the degrees of the VERT database table.
+    '''
+    sql = 'SELECT AVG(DEGREE) FROM VERT'
+    return sql_query(sql)
+
+def get_lowest_weight():
+    '''
+    Get the edge with the lowest weight from the database.
+    '''
+    sql = 'SELECT TOP 1 * FROM EDGE ORDER BY WEIGHT'
+    return sql_query(sql)
+
+def get_highest_weight():
+    '''
+    Get the edge with the highest weight from the database.
+    '''
+    sql = 'SELECT TOP 1 * FROM EDGE ORDER BY WEIGHT DESC'
+    return sql_query(sql)
+
+def get_avg_weight():
+    '''
+    Get the average of weights from the EDGE table. 
+    '''
+    sql = 'SELECT AVG(WEIGHT) FROM EDGE'
+    return sql_query(sql)
+
+def get_largest_clique:
+    '''
+    Get the largest clique from database.
+    '''
+    sql = 'SELECT TOP 1 * FROM CLIQUE ORDER BY AMMO'
+    return sql_query(sql)
+
+def get_clique_amt:
+    '''
+    Enumerate the cliques on the database.
+    '''
+    sql = 'SELECT COUNT(*) FROM CLIQUE'
+    return sql_query(sql)
+
+def get_clique_by_id(cliqueID):
+    '''
+    Get a clique by cliqueID from the database.
+    '''
+    sql = 'SELECT * FROM CLIQUE WHERE ID=' + cliqueID
+
+def get_vert_by_id(nodeID):
+    '''
+    Get vert by nodeID from the database.
+    '''
+    sql = 'SELECT * FROM VERT WHERE ID=' + nodeID
 
 
 def extract_cliques():
