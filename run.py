@@ -175,7 +175,7 @@ def insert_clique(size, members):
     Insert clique with size as weight and members, members should be
     a LONGTEXT complient JSON file.
     '''
-    sql = 'INSERT INTO CLIQUE(ID, AMMO, MEMBERS) VALUES (0, ' + str(size) + ', ' + str(members) + ')'
+    sql = 'INSERT INTO CLIQUE(ID, AMMO, MEMBERS) VALUES (0, ' + str(size) + ', \'' + str(members) + '\')'
     sql_execute(sql)
 
 def get_lowest_degree():
