@@ -78,7 +78,7 @@ def process_form(form, graph_types):
                     if l['target'] == n['name'] or l['source'] == n['name']:
                         d += 1
                 print("Adding Node to SQL: ", n,d)
-                insert_vert(int(n['name'])+1,int(d))
+                insert_vert(int(n['name'])+1,int(n['group']),int(d))
             for l in G['links']:
                 print("Adding Link to SQL: ",int(l['source']), int(l['target']), int(l['value']))
                 insert_edge(int(l['source'])+1, int(l['target'])+1, int(l['value']))
@@ -155,11 +155,11 @@ def reset_db():
     '''
     sql_execute_file('setup_no_usr.sql')
 
-def insert_vert(color, degree):
+def insert_vert(name, color, degree):
     '''
     Insert vertex of specific color and degree into the database.
     '''
-    sql = 'INSERT INTO VERT(ID, COLOR, DEGREE) VALUES (0, ' + str(color) + ', ' + str(degree) + ')'
+    sql = 'INSERT INTO VERT(ID, COLOR, DEGREE) VALUES (' + int(name) + ', ' + str(color) + ', ' + str(degree) + ')'
     sql_execute(sql)
 
 def insert_edge(sourceID, targetID, weight):
