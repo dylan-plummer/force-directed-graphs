@@ -25,6 +25,7 @@ SQL TABLES:
 ///////////////////////////////////////////////////////////////////////////////
 
 INSTALLATION:
+
 	CONFIGURE HOST IN config.ini UNDER [app]
 
 	LOG ONTO MYSQL SERVER WITH GRANT USER PRIVILEGE (USING -p FOR WHEEL SQL USER)
