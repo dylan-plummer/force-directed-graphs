@@ -195,14 +195,14 @@ def get_avg_weight():
     sql = 'SELECT AVG(WEIGHT) FROM EDGE'
     return sql_query(sql)
 
-def get_largest_clique:
+def get_largest_clique():
     '''
     Get the largest clique from database.
     '''
     sql = 'SELECT TOP 1 * FROM CLIQUE ORDER BY AMMO'
     return sql_query(sql)
 
-def get_clique_amt:
+def get_clique_amt():
     '''
     Enumerate the cliques on the database.
     '''
