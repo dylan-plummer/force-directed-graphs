@@ -2,6 +2,7 @@ import configparser
 from flask import Flask, render_template, request, flash, redirect, url_for
 from GraphGen import GenerateGraph, GraphToJSON, FindCliques, ExtractCliques
 import mysql.connector
+import json
 
 # Read configuration from file.
 config = configparser.ConfigParser()
@@ -49,7 +50,6 @@ def process_form(form, graph_types):
     Generates a graph based on the user entered values
     '''
     try:
-        print("lol")
         num_verts = request.form['num-verts']
         edge_prob = request.form['edge-prob']
         max_weight = request.form['max-weight']
@@ -58,7 +58,22 @@ def process_form(form, graph_types):
             flash('Edge probability must be between 0 and 1')
         else:
             print("gen")
-            GraphToJSON(GenerateGraph(int(num_verts), float(edge_prob), int(max_weight), graph_type))
+            G = GenerateGraph(int(num_verts), float(edge_prob), int(max_weight), graph_type)
+            GraphToJSON(G)
+            #Store Graph in SQL
+            reset_db()
+            for n in G['nodes']:
+                for l in G['links']:
+                    d = 0
+                    if l['target'] == n['name'] or l['source'] == n['name']:
+                        d += 1
+                insert_vert(n['group'],d)
+            for l in G['links']:
+                insert_edge(l['source'], l['target'], l['value'])
+            C = FindCliques()
+            for c in C:
+                insert_clique(len(C),json.dump(c))
+
     except TypeError as e1:
         print(e1)
         flash('Number of vertices must be an integer')
@@ -123,7 +138,7 @@ def template_response_with_data():
     metrics = get_metrics()
     return render_template('index.html', choices=list(choices.keys()), state=state, metrics=metrics)
 
-def reset_db();
+def reset_db():
     '''
     Resets the database
     '''
@@ -137,7 +152,7 @@ def insert_vert(color, degree):
     sql = 'INSERT INTO VERT(ID, COLOR, DEGREE) VALUES (0, ' + color + ', ' + degree + ')'
     sql_execute(sql)
 
-def insert_edge(sourceID, targetID):
+def insert_edge(sourceID, targetID, weight):
     '''
     Insert edge of specific source and target id as well as weight
     into the database.
@@ -145,12 +160,12 @@ def insert_edge(sourceID, targetID):
     sql = 'INSERT INTO EDGE(SOURCE, TARGET, WEIGHT) VALUES (' + sourceID + ', ' + targetID + ', ' + weight + ')'
     sql_execute(sql)
 
-def insert_clique(weight, members):
+def insert_clique(size, members):
     '''
     Insert clique with size as weight and members, members should be
     a LONGTEXT complient JSON file.
     '''
-    sql = 'INSERT INTO CLIQUE(ID, AMMO, MEMBERS) VALUES (0, ' + weight + ', ' + members + ')'
+    sql = 'INSERT INTO CLIQUE(ID, AMMO, MEMBERS) VALUES (0, ' + size + ', ' + members + ')'
     sql_execute(sql)
 
 def get_lowest_degree():
@@ -237,14 +252,14 @@ def get_metrics():
     # ToDo:
     # Get metrics from sql
 
-    minDeg = 0
-    maxDeg = 0
-    avgDeg = 0
-    minWgt = 0
-    maxWgt = 0
-    avgWgt = 0
-    lrgClq = 0
-    numClq = 0
+    minDeg = get_lowest_degree()
+    maxDeg = get_highest_degree()
+    avgDeg = get_avg_degree()
+    minWgt = get_lowest_weight()
+    maxWgt = get_highest_weight()
+    avgWgt = get_avg_weight()
+    lrgClq = get_largest_clique()
+    numClq = get_clique_amt()
 
     metrics = ['Min Degree: '+ str(minDeg), 'Max Degree: '+ str(maxDeg), 'Average Degree: '+ str(avgDeg),
                'Min Weight: '+ str(minWgt), 'Max Weight: '+ str(maxWgt), 'Average Weight: '+ str(avgWgt),
