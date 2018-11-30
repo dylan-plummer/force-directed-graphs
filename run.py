@@ -161,7 +161,7 @@ def insert_vert(color, degree):
     '''
     Insert vertex of specific color and degree into the database.
     '''
-    sql = 'INSERT INTO VERT(ID, COLOR, DEGREE) VALUES (0, ' + color + ', ' + degree + ')'
+    sql = 'INSERT INTO VERT(ID, COLOR, DEGREE) VALUES (0, ' + str(color) + ', ' + str(degree) + ')'
     sql_execute(sql)
 
 def insert_edge(sourceID, targetID, weight):
@@ -169,7 +169,7 @@ def insert_edge(sourceID, targetID, weight):
     Insert edge of specific source and target id as well as weight
     into the database.
     '''
-    sql = 'INSERT INTO EDGE(SOURCE, TARGET, WEIGHT) VALUES (' + sourceID + ', ' + targetID + ', ' + weight + ')'
+    sql = 'INSERT INTO EDGE(SOURCE, TARGET, WEIGHT) VALUES (' + str(sourceID) + ', ' + str(targetID) + ', ' + str(weight) + ')'
     sql_execute(sql)
 
 def insert_clique(size, members):
@@ -177,7 +177,7 @@ def insert_clique(size, members):
     Insert clique with size as weight and members, members should be
     a LONGTEXT complient JSON file.
     '''
-    sql = 'INSERT INTO CLIQUE(ID, AMMO, MEMBERS) VALUES (0, ' + size + ', ' + members + ')'
+    sql = 'INSERT INTO CLIQUE(ID, AMMO, MEMBERS) VALUES (0, ' + str(size) + ', ' + str(members) + ')'
     sql_execute(sql)
 
 def get_lowest_degree():
@@ -240,13 +240,13 @@ def get_clique_by_id(cliqueID):
     '''
     Get a clique by cliqueID from the database.
     '''
-    sql = 'SELECT * FROM CLIQUE WHERE ID=' + cliqueID
+    sql = 'SELECT * FROM CLIQUE WHERE ID=' + str(cliqueID)
 
 def get_vert_by_id(nodeID):
     '''
     Get vert by nodeID from the database.
     '''
-    sql = 'SELECT * FROM VERT WHERE ID=' + nodeID
+    sql = 'SELECT * FROM VERT WHERE ID=' + str(nodeID)
 
 
 def extract_cliques():
