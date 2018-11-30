@@ -78,7 +78,7 @@ def process_form(form, graph_types):
                     if l['target'] == n['name'] or l['source'] == n['name']:
                         d += 1
                 print("Adding Node to SQL: ", n,d)
-                insert_vert(int(n['group'])+1,int(d))
+                insert_vert(int(n['name'])+1,int(d))
             for l in G['links']:
                 print("Adding Link to SQL: ",int(l['source']), int(l['target']), int(l['value']))
                 insert_edge(int(l['source'])+1, int(l['target'])+1, int(l['value']))
