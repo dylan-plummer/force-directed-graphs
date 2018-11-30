@@ -85,7 +85,7 @@ def process_form(form, graph_types):
             C = FindCliques()
             for c in C:
                 print("Adding Clique to SLQ: ", str(json.dump(c)))
-                insert_clique(len(C),json.dump(c))
+                insert_clique(len(C),c)
 
     except TypeError as e1:
         print(e1)
@@ -262,12 +262,12 @@ def get_metrics():
     # ToDo:
     # Get metrics from sql
 
-    minDeg = get_lowest_degree()
-    maxDeg = get_highest_degree()
-    avgDeg = get_avg_degree()
-    minWgt = get_lowest_weight()
-    maxWgt = get_highest_weight()
-    avgWgt = get_avg_weight()
+    minDeg = get_lowest_degree()[2]
+    maxDeg = get_highest_degree()[2]
+    avgDeg = get_avg_degree()[0]
+    minWgt = get_lowest_weight()[2]
+    maxWgt = get_highest_weight()[2]
+    avgWgt = get_avg_weight()[0]
     lrgClq = get_largest_clique()
     numClq = get_clique_amt()
 
