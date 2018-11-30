@@ -85,8 +85,8 @@ def process_form(form, graph_types):
             C = FindCliques()
             index = 0
             for c in C:
-                print("Adding Clique to SLQ: ", str(c))
-                insert_clique(index, len(c),str(c))
+                print("Adding Clique to SLQ: ", str(c), len(c))
+                insert_clique(index, len(c), str(c))
                 index += 1
 
     except TypeError as e1:
@@ -226,7 +226,7 @@ def get_largest_clique():
     '''
     Get the largest clique from database.
     '''
-    sql = 'SELECT * FROM CLIQUE ORDER BY AMMO LIMIT 1'
+    sql = 'SELECT * FROM CLIQUE ORDER BY AMMO DESC LIMIT 1'
     return sql_query(sql)
 
 def get_clique_amt():
@@ -270,7 +270,7 @@ def get_metrics():
         minWgt = get_lowest_weight()[0][2]
         maxWgt = get_highest_weight()[0][2]
         avgWgt = get_avg_weight()[0]
-        lrgClq = get_largest_clique()
+        lrgClq = get_largest_clique()[0]
         numClq = get_clique_amt()
     except IndexError:
         minDeg = "null, pls refresh"
