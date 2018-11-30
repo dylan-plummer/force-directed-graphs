@@ -83,9 +83,11 @@ def process_form(form, graph_types):
                 print("Adding Link to SQL: ",int(l['source']), int(l['target']), int(l['value']))
                 insert_edge(int(l['source'])+1, int(l['target'])+1, int(l['value']))
             C = FindCliques()
+            index = 0
             for c in C:
                 print("Adding Clique to SLQ: ", str(c))
-                insert_clique(len(c),str(c))
+                insert_clique(index, len(c),str(c))
+                index += 1
 
     except TypeError as e1:
         print(e1)
@@ -170,12 +172,12 @@ def insert_edge(sourceID, targetID, weight):
     sql = 'INSERT INTO EDGE(SOURCE, TARGET, WEIGHT) VALUES (' + str(sourceID) + ', ' + str(targetID) + ', ' + str(weight) + ')'
     sql_execute(sql)
 
-def insert_clique(size, members):
+def insert_clique(id, size, members):
     '''
     Insert clique with size as weight and members, members should be
     a LONGTEXT complient JSON file.
     '''
-    sql = 'INSERT INTO CLIQUE(ID, AMMO, MEMBERS) VALUES (0, ' + str(size) + ', \'' + str(members) + '\')'
+    sql = 'INSERT INTO CLIQUE(ID, AMMO, MEMBERS) VALUES ('+str(id)+', ' + str(size) + ', \'' + str(members) + '\')'
     sql_execute(sql)
 
 def get_lowest_degree():
