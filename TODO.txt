@@ -5,7 +5,7 @@ Store Graphs in SQL as:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 DB = Graph
 Tables:
-	=Node=                             =Link=
+	=Node=                             =Edge=
 	-ID	    <int, unique primary>   -Source  <Foreign Node ID>
 	-Group  <int>                       -Target  <Foreign Node ID>
 	-Degree <int                        -Weight  <int>
