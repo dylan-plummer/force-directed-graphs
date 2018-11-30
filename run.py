@@ -70,6 +70,7 @@ def process_form(form, graph_types):
             G = GenerateGraph(int(num_verts), float(edge_prob), int(max_weight), graph_type)
             GraphToJSON(G)
             #Store Graph in SQL
+            print("Resetting DB")
             reset_db()
             for n in G['nodes']:
                 for l in G['links']:
