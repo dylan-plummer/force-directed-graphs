@@ -261,15 +261,24 @@ def get_metrics():
     '''
     # ToDo:
     # Get metrics from sql
-
-    minDeg = get_lowest_degree()[0][2]
-    maxDeg = get_highest_degree()[0][2]
-    avgDeg = get_avg_degree()[0]
-    minWgt = get_lowest_weight()[0][2]
-    maxWgt = get_highest_weight()[0][2]
-    avgWgt = get_avg_weight()[0]
-    lrgClq = get_largest_clique()
-    numClq = get_clique_amt()
+    try:
+        minDeg = get_lowest_degree()[0][2]
+        maxDeg = get_highest_degree()[0][2]
+        avgDeg = get_avg_degree()[0]
+        minWgt = get_lowest_weight()[0][2]
+        maxWgt = get_highest_weight()[0][2]
+        avgWgt = get_avg_weight()[0]
+        lrgClq = get_largest_clique()
+        numClq = get_clique_amt()
+    except IndexError:
+        minDeg = "null, pls refresh"
+        maxDeg = "null, pls refresh"
+        avgDeg = "null, pls refresh"
+        minWgt = "null, pls refresh"
+        maxWgt = "null, pls refresh"
+        avgWgt = "null, pls refresh"
+        lrgClq = "null, pls refresh"
+        numClq = "null, pls refresh"
 
     metrics = ['Min Degree: '+ str(minDeg), 'Max Degree: '+ str(maxDeg), 'Average Degree: '+ str(avgDeg),
                'Min Weight: '+ str(minWgt), 'Max Weight: '+ str(maxWgt), 'Average Weight: '+ str(avgWgt),
