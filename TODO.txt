@@ -5,15 +5,15 @@ Store Graphs in SQL as:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 DB = Graph
 Tables:
-	=Node=                             =Edge=
-	-ID	    <int, unique primary>   -Source  <Foreign Node ID>
-	-Group  <int>                       -Target  <Foreign Node ID>
-	-Degree <int                        -Weight  <int>
+	=NODE=					=EDGE=
+	-ID		<int, unique primary>  	-SOURCE <Foreign Node ID>
+	-COLOR 		<int>                 	-TARGER  <Foreign Node ID>
+	-DEGREE 	<int>                   -WEIGHT  <int>
 
-	=Clique=
-	 -ID       <int, unique primary>
-	 -Ammo     <int>
-	 -Members  <json>
+	=CLIQUE=
+	 -ID      	<int, unique primary>
+	 -AMMO	    	<int>
+	 -MEMBERS 	<json>
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
