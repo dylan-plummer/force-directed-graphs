@@ -40,6 +40,7 @@ def process_form(form, graph_types):
     Generates a graph based on the user entered values
     '''
     try:
+        print("lol")
         num_verts = request.form['num-verts']
         edge_prob = request.form['edge-prob']
         max_weight = request.form['max-weight']
@@ -47,6 +48,7 @@ def process_form(form, graph_types):
         if not 0.0 <= float(edge_prob) <= 1.0: # make sure edge_prob is a probability
             flash('Edge probability must be between 0 and 1')
         else:
+            print("gen")
             GraphToJSON(GenerateGraph(int(num_verts), float(edge_prob), int(max_weight), graph_type))
     except TypeError as e1:
         print(e1)
@@ -103,7 +105,7 @@ def template_response_with_data():
     form = startup_form(request.form)
     selected = form['graph-type']
     state = {'choice': selected}
-    sql = 'insert into node(id, color, name) values (0, 1, 0)'
+    sql = 'insert into VERT(ID, COLOR, DEGREE) values (0, 1, 0)'
     sql_execute(sql)
     if form['cliques'] == 1:
         extract_cliques()
@@ -111,6 +113,34 @@ def template_response_with_data():
         process_form(form, choices)
     metrics = get_metrics()
     return render_template('index.html', choices=list(choices.keys()), state=state, metrics=metrics)
+
+def reset_db();
+    '''
+    Resets the database
+    '''
+    sql = 'source setup.sql'
+    sql_execute(sql)
+
+def insert_vert(color, degree):
+    '''
+    Insert vertex of specific color and degree into database
+    '''
+    sql = 'INSERT INTO VERT(ID, COLOR, DEGREE) VALUES (0, ' + color + ', ' + degree + ')'
+    sql_execute(sql)
+
+def insert_edge(sourceID, targetID):
+    '''
+    Insert edge of specific source and target id as well as weight into database
+    '''
+    sql = 'INSERT INTO EDGE(SOURCE, TARGET, WEIGHT) VALUES (' + sourceID + ', ' + targetID + ', ' + weight + ')'
+    sql_execute(sql)
+
+def insert_clique(weight, members):
+    '''
+    Insert edge of specific source and target id as well as weight into database
+    '''
+    sql = 'INSERT INTO CLIQUE(ID, AMMO, MEMBERS) VALUES (0, ' + weight + ', ' + members + ')'
+    sql_execute(sql)
 
 
 def extract_cliques():
@@ -157,4 +187,4 @@ def dated_url_for(endpoint, **values):
 
 if __name__ == '__main__':
     app.secret_key = 'shhh it\'s a secret'
-    app.run(host='127.3.4.1', port=3000, debug=True)
+    app.run(**config['app'])
