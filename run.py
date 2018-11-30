@@ -77,10 +77,13 @@ def process_form(form, graph_types):
                     if l['target'] == n['name'] or l['source'] == n['name']:
                         d += 1
                 insert_vert(n['group'],d)
+                print("Adding Node to SQL: ", n,d)
             for l in G['links']:
                 insert_edge(l['source'], l['target'], l['value'])
+                print("Adding Link to SQL: ", l)
             C = FindCliques()
             for c in C:
+                print("Adding Clique to SLQ: ",c)
                 insert_clique(len(C),json.dump(c))
 
     except TypeError as e1:
