@@ -1,5 +1,20 @@
 # GRAPHMON JOHNSQL
 
+### Extracted Cliques:
+<img src="https://github.com/jumproper/force-directed-graphs/blob/master/demos/cliques.JPG" alt="drawing" width="400"/>
+
+### Component Graphs:
+<img src="https://github.com/jumproper/force-directed-graphs/blob/master/demos/component.JPG" alt="drawing" width="400"/>
+
+### Trees:
+<img src="https://github.com/jumproper/force-directed-graphs/blob/master/demos/trees.JPG" alt="drawing" width="400"/>
+
+### Planar Graphs:
+<img src="https://github.com/jumproper/force-directed-graphs/blob/master/demos/planar.JPG" alt="drawing" width="400"/>
+
+### Sparse Random:
+<img src="https://github.com/jumproper/force-directed-graphs/blob/master/demos/random_sparse.JPG" alt="drawing" width="400"/>
+
 DYLAN PLUMMER		| FRONTEND
 
 MICHAEL TUCCI		| BACKEND
