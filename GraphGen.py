@@ -12,6 +12,7 @@ import networkx as nx
 
 
 def GraphToJSON(data):
+#    if os.path.isfile('static/graph.json'):
     os.remove('static/graph.json')
     with open('static/graph.json','w') as f: json.dump(data,f)
 

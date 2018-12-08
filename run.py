@@ -1,7 +1,10 @@
 import configparser
+import os
 from flask import Flask, render_template, request, flash, redirect, url_for
 from GraphGen import GenerateGraph, GraphToJSON, FindCliques, ExtractCliques
 import mysql.connector
+import json
+
 
 # Read configuration from file.
 config = configparser.ConfigParser()
@@ -34,6 +37,22 @@ def sql_execute(sql):
     cursor.close()
     db.close()
 
+def sql_execute_file(sql):
+    db = mysql.connector.connect(**config['mysql.connector'])
+    cursor = db.cursor()
+    fd = open(sql, 'r')
+    sqlFile = fd.read()
+    fd.close()
+    sqlCommands = sqlFile.split(';')
+
+    for command in sqlCommands:
+        try:
+            if command.strip() != '':
+                cursor.execute(command)
+        except IOError:
+            print("Command skipped: ")
+    db.close()
+
 
 def process_form(form, graph_types):
     '''
@@ -47,7 +66,29 @@ def process_form(form, graph_types):
         if not 0.0 <= float(edge_prob) <= 1.0: # make sure edge_prob is a probability
             flash('Edge probability must be between 0 and 1')
         else:
-            GraphToJSON(GenerateGraph(int(num_verts), float(edge_prob), int(max_weight), graph_type))
+            print("gen")
+            G = GenerateGraph(int(num_verts), float(edge_prob), int(max_weight), graph_type)
+            GraphToJSON(G)
+            #Store Graph in SQL
+            print("Resetting DB")
+            reset_db()
+            for n in G['nodes']:
+                d = 0
+                for l in G['links']:
+                    if l['target'] == n['name'] or l['source'] == n['name']:
+                        d += 1
+                print("Adding Node to SQL: ", n,d)
+                insert_vert(int(n['name'])+1,int(n['group']),int(d))
+            for l in G['links']:
+                print("Adding Link to SQL: ",int(l['source']), int(l['target']), int(l['value']))
+                insert_edge(int(l['source'])+1, int(l['target'])+1, int(l['value']))
+            C = FindCliques()
+            index = 0
+            for c in C:
+                print("Adding Clique to SLQ: ", str(c), len(c))
+                insert_clique(index, len(c), str(c))
+                index += 1
+
     except TypeError as e1:
         print(e1)
         flash('Number of vertices must be an integer')
@@ -103,14 +144,109 @@ def template_response_with_data():
     form = startup_form(request.form)
     selected = form['graph-type']
     state = {'choice': selected}
-    sql = 'insert into node(id, color, name) values (0, 1, 0)'
-    sql_execute(sql)
     if form['cliques'] == 1:
         extract_cliques()
     else:
         process_form(form, choices)
     metrics = get_metrics()
     return render_template('index.html', choices=list(choices.keys()), state=state, metrics=metrics)
+
+def reset_db():
+    '''
+    Resets the database
+    '''
+    sql_execute_file('setup_no_usr.sql')
+
+def insert_vert(name, color, degree):
+    '''
+    Insert vertex of specific color and degree into the database.
+    '''
+    sql = 'INSERT INTO VERT(ID, COLOR, DEGREE) VALUES (' + str(int(name)) + ', ' + str(color) + ', ' + str(degree) + ')'
+    sql_execute(sql)
+
+def insert_edge(sourceID, targetID, weight):
+    '''
+    Insert edge of specific source and target id as well as weight
+    into the database.
+    '''
+    sql = 'INSERT INTO EDGE(SOURCE, TARGET, WEIGHT) VALUES (' + str(sourceID) + ', ' + str(targetID) + ', ' + str(weight) + ')'
+    sql_execute(sql)
+
+def insert_clique(id, size, members):
+    '''
+    Insert clique with size as weight and members, members should be
+    a LONGTEXT complient JSON file.
+    '''
+    sql = 'INSERT INTO CLIQUE(ID, AMMO, MEMBERS) VALUES ('+str(id)+', ' + str(size) + ', \'' + str(members) + '\')'
+    sql_execute(sql)
+
+def get_lowest_degree():
+    '''
+    Get the lowest degree from the database.
+    '''
+    sql = 'SELECT * FROM VERT ORDER BY DEGREE LIMIT 1'
+    return sql_query(sql)
+
+def get_highest_degree():
+    '''
+    Get the highest degree from the database.
+    '''
+    sql = 'SELECT * FROM VERT ORDER BY DEGREE DESC LIMIT 1'
+    return sql_query(sql)
+
+def get_avg_degree():
+    '''
+    Get the average of the degrees of the VERT database table.
+    '''
+    sql = 'SELECT AVG(DEGREE) FROM VERT'
+    return sql_query(sql)
+
+def get_lowest_weight():
+    '''
+    Get the edge with the lowest weight from the database.
+    '''
+    sql = 'SELECT * FROM EDGE ORDER BY WEIGHT LIMIT 1'
+    return sql_query(sql)
+
+def get_highest_weight():
+    '''
+    Get the edge with the highest weight from the database.
+    '''
+    sql = 'SELECT * FROM EDGE ORDER BY WEIGHT DESC LIMIT 1'
+    return sql_query(sql)
+
+def get_avg_weight():
+    '''
+    Get the average of weights from the EDGE table. 
+    '''
+    sql = 'SELECT AVG(WEIGHT) FROM EDGE'
+    return sql_query(sql)
+
+def get_largest_clique():
+    '''
+    Get the largest clique from database.
+    '''
+    sql = 'SELECT * FROM CLIQUE ORDER BY AMMO DESC LIMIT 1'
+    return sql_query(sql)
+
+def get_clique_amt():
+    '''
+    Enumerate the cliques on the database.
+    '''
+    sql = 'SELECT COUNT(*) FROM CLIQUE'
+    return sql_query(sql)
+
+def get_clique_by_id(cliqueID):
+    '''
+    Get a clique by cliqueID from the database.
+    '''
+    sql = 'SELECT * FROM CLIQUE WHERE ID=' + str(cliqueID)
+
+def get_vert_by_id(nodeID):
+    '''
+    Get vert by nodeID from the database.
+    '''
+    sql = 'SELECT * FROM VERT WHERE ID=' + str(nodeID)
 
 
 def extract_cliques():
@@ -127,15 +263,24 @@ def get_metrics():
     '''
     # ToDo:
     # Get metrics from sql
-
-    minDeg = 0
-    maxDeg = 0
-    avgDeg = 0
-    minWgt = 0
-    maxWgt = 0
-    avgWgt = 0
-    lrgClq = 0
-    numClq = 0
+    try:
+        minDeg = get_lowest_degree()[0][2]
+        maxDeg = get_highest_degree()[0][2]
+        avgDeg = get_avg_degree()[0][0]
+        minWgt = get_lowest_weight()[0][2]
+        maxWgt = get_highest_weight()[0][2]
+        avgWgt = get_avg_weight()[0][0]
+        lrgClq = get_largest_clique()[0]
+        numClq = get_clique_amt()[0][0]
+    except IndexError:
+        minDeg = "null, pls refresh"
+        maxDeg = "null, pls refresh"
+        avgDeg = "null, pls refresh"
+        minWgt = "null, pls refresh"
+        maxWgt = "null, pls refresh"
+        avgWgt = "null, pls refresh"
+        lrgClq = "null, pls refresh"
+        numClq = "null, pls refresh"
 
     metrics = ['Min Degree: '+ str(minDeg), 'Max Degree: '+ str(maxDeg), 'Average Degree: '+ str(avgDeg),
                'Min Weight: '+ str(minWgt), 'Max Weight: '+ str(maxWgt), 'Average Weight: '+ str(avgWgt),
@@ -157,4 +302,4 @@ def dated_url_for(endpoint, **values):
 
 if __name__ == '__main__':
     app.secret_key = 'shhh it\'s a secret'
-    app.run(host='127.3.4.1', port=3000, debug=True)
+    app.run(**config['app'])
